@@ -10,4 +10,4 @@ lru_cache_t *lru_create(int size);
 
 void lru_free(lru_cache_t *lru);
 
-int lru_lookup_update(lru_cache_t *lru, keyT key, slow_get slow);
+int lru_lookup_update(lru_cache_t *lru, keyT key);
