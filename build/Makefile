@@ -17,10 +17,13 @@ HASH_SRC = $(HASH_DIR)/src
 
 CFLAGS ?= -g -Wall -Wextra -I$(INC) -I$(LIST_INC) -I$(HASH_INC) 
 
-all: list.o hash_table.o ctests.o 
+all: list.o hash_table.o LRUcache.o ctests.o
 	$(CC) $(CFLAGS) $^ -o main
 
 ctests.o: $(TEST_DIR)/ctests.cc
+	$(CC) $(CFLAGS) -c $^
+
+LRUcache.o: $(SRC)/LRUcache.cc $(INC)/LRUcache.h
 	$(CC) $(CFLAGS) -c $^
 
 list.o: $(LIST_SRC)/list.cc $(LIST_INC)/list.h
