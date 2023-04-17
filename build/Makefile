@@ -15,7 +15,7 @@ LIST_SRC = $(LIST_DIR)/src
 HASH_INC = $(HASH_DIR)/include
 HASH_SRC = $(HASH_DIR)/src
 
-CFLAGS ?= -g -Wall -Wextra 
+CFLAGS ?= -g -Wall -Wextra -I$(INC) -I$(LIST_INC) -I$(HASH_INC)
 
 all: list.o hash_table.o ctests.o 
 	$(CC) $(CFLAGS) $^ -o main

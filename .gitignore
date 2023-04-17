@@ -1,0 +1,9 @@
+*.o
+main
+main.exe
+tests\ctests.cc
+build\Makefile
+build\valgrind-out.txt
+/.vscode
+/build
+

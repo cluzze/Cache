@@ -8,10 +8,9 @@ struct htab_t;
 
 typedef struct htab_t htab_t;
 
-/*
 typedef const char* keyT;
+
 typedef int valueT;
-*/
 
 htab_t *htab_create(int size, int (*hash)(keyT));
 
