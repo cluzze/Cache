@@ -1,6 +1,7 @@
 #include "list.h"
 
-struct list_node_t {
+struct list_node_t 
+{
 	keyT key;
 	valueT value;
 	list_node_t *next;
@@ -16,7 +17,7 @@ struct list_t
 
 list_t *list_create() 
 {
-	
+
 }
 
 void list_free(list_t *list) 

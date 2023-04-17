@@ -1,5 +1,4 @@
-#include "hash_table.h"
-#include "list.h"
+#include "../include/hash_table.h"
 #include <stdlib.h>
 #include <stdio.h>
 
@@ -58,3 +57,28 @@ void htab_free(htab_t *htab)
 
 	free(htab);
 }
+
+int htab_size(htab_t *htab) 
+{
+	return htab->size;
+}
+
+int htab_load_factor(htab_t *htab)
+{
+	return htab->load_factor;
+}
+
+
+// list_node_t *htab_find(htab_t *htab, keyT key) 
+// {
+// 	int hash = htab->hash(key);
+// 	htab_node_t *node = htab->buckets[hash];
+// }
+
+
+// void htab_erase(htab_t *htab, keyT key) 
+// {
+// 	int hash = htab->hash(key);
+// 	list_node_t *node_key = htab_find(htab, key);
+
+// }

@@ -6,4 +6,9 @@ build\Makefile
 build\valgrind-out.txt
 /.vscode
 /build
+/list
+/src
+/tests
+*.gch
+.gitignore
 
