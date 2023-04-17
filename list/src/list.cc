@@ -13,3 +13,13 @@ struct list_t
 	list_node_t *back;
 	int size;
 };
+
+list_t *list_create() 
+{
+	
+}
+
+void list_free(list_t *list) 
+{
+
+}
