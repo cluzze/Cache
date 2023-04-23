@@ -8,7 +8,7 @@ struct list_t;
 typedef struct list_t list_t;
 typedef struct list_node_t list_node_t;
 
-typedef const char* keyT;
+typedef int keyT;
 typedef int valueT;
 
 list_t *list_create();
@@ -25,6 +25,8 @@ void list_pop_front(list_t *list);
 
 list_node_t *list_back(list_t *list);
 
+list_node_t *list_next(list_t *list, list_node_t *node);
+
 list_node_t *list_front(list_t *list);
 
 int list_size(list_t *list);
@@ -32,3 +34,7 @@ int list_size(list_t *list);
 int list_empty(list_t *list);
 
 void list_dump(list_t *list);
+
+keyT node_key(list_node_t *node);
+
+void list_erase(list_t *list, list_node_t *node);

@@ -32,24 +32,19 @@ int defolt_hash(keyT key, int size)
 } 
 
 
-htab_t *htab_create(int size, int (*hash)(keyT, int)) 
+htab_t *htab_create(int size) 
 {
 	assert(size != 0 && "size == 0");
 	htab_t *htab = (htab_t *) calloc(1, sizeof(htab_t));
+	assert(htab && "null pointer after calloc in htab_create");
+
 	htab->buckets = (htab_node_t **) calloc(size + 1, sizeof(htab_node_t *));
+	assert(htab->buckets && "null pointer after calloc in htab_create");
+
 	htab->size = size;
 	htab->load_factor = 0;
 	htab->list = list_create();
-
-
-	if (hash == NULL) 
-	{
-		htab->hash = &defolt_hash;
-	}
-	else 
-	{
-		htab->hash = hash;
-	}
+	assert(htab->list && "null pointer after list_create in htab_create");
 
 	return htab;
 }
@@ -57,6 +52,7 @@ htab_t *htab_create(int size, int (*hash)(keyT, int))
 void htab_free(htab_t *htab) 
 {
 	assert(htab && "null pointer in htab_free");
+	free_node(htab);
 	free(htab->buckets);
 	list_free(htab->list);
 
@@ -65,7 +61,6 @@ void htab_free(htab_t *htab)
 	htab->hash = NULL;
 
 	free(htab);
-	// добавить очистку каждого элемента по нодам в бакете тк в функции добавления память будет выделяться
 }
 
 int htab_size(htab_t *htab) 
@@ -98,10 +93,10 @@ list_node_t *htab_find_list_node(htab_t *htab, keyT key)
 htab_node_t *htab_find_hash_node(htab_t *htab, keyT key) 
 {
 	assert(htab && "null pointer in htab_find_hash_node");
-	int hash = htab->hash(key, htab->size);
 
+	int hash = htab->hash(key, htab->size);
 	htab_node_t *htab_node = htab->buckets[hash];
-//потом добавить функцию поиска для каждого значения
+
 	while (htab_node && node_key(htab_node->node) == key) 
 	{
 		htab_node = htab_node->next;
@@ -115,7 +110,6 @@ void htab_insert(htab_t *htab, keyT key)
 	assert(htab && "null pointer in htab_insert");
 
 	int hash = htab->hash(key, htab->size);
-	// node_htab = htab_find_hash_node(htab, key);
 
 	if (!htab_find_hash_node(htab, key)) 
 	{
@@ -123,6 +117,7 @@ void htab_insert(htab_t *htab, keyT key)
 	}
 	
 	htab_node_t *node_htab = (htab_node_t *) calloc(1, sizeof(htab_node_t));
+	assert(node_htab && "null pointer after calloc in insert");
 
 	node_htab->next = htab->buckets[hash];
 	
@@ -137,13 +132,20 @@ void htab_insert(htab_t *htab, keyT key)
 
 }
 
+void htab_insert_list_node(htab_t *htab, list_node_t *list_node) 
+{
+	assert(htab && "null pointer in htab_insert");
+	keyT key = node_key(list_node);
+	htab_insert(htab, key);
+}
+
 void htab_erase(htab_t *htab, keyT key) 
 {
+	assert(htab && "null pointer in htab_erase");
+
 	int hash = 0;
-	// убать хэш в ифы
 	htab_node_t *node_hash = htab_find_hash_node(htab, key);
 
-	// случаи
 	if (!node_hash->next && !node_hash->prev) 
 	{
 		hash = htab->hash(key, htab->size); 
@@ -170,15 +172,43 @@ void htab_erase(htab_t *htab, keyT key)
 	free(node_hash);
 }
 
-void htab_rehash(htab_t *htab, int size, int (*hash)(keyT))
+void free_node(htab_t *htab)
 {
-	htab_t *new_htab = htab_create(size, hash);
+	assert(htab && "null pointer in free_node");
+	
+	htab_node_t *next = NULL;
+	htab_node_t *node = NULL;
 
-// удалить все ноды в функцию
-// реалок массива
-// прохожусь по списку и делаю инсерт для каждого значения списка
-// инсерт новый нужен или модифицирую функцию 
-// impull работа только с htab
+	for (int i = 0; i < htab->size; i++)
+	{
+		node = htab->buckets[i];
+
+		while (node) 
+		{
+			next = node->next;
+			free(node);
+			node = next;			
+		}
+	}
+	
+}
+
+void htab_rehash(htab_t *htab, int new_size, int (*hash)(keyT))
+{
+	assert(htab && "null pointer in htab_rehash");
+	
+	list_node_t *list_node = list_front(htab->list);
+	free_node(htab);
+
+	htab->buckets = (htab_node_t **) realloc(htab->buckets, new_size);
+	assert(htab->buckets && "null pointer after realloc");
+	htab->size = new_size;
+
+	for (int i = 0; i < list_size(htab->list); i++)
+	{
+		htab_insert_list_node(htab, list_node);
+		list_node = list_next(htab->list, list_node);
+	}
 
 }
 
@@ -194,9 +224,8 @@ void htab_dump(const htab_t *htab)
 
 		while (htab_node)
 		{
-			// printf("hash: %d\n", htab->hash(htab_node->node->key));
-			// номер бакета
-			printf("key:  %s\n", node_key(htab_node->node));	
+			printf("number: %d\n", i);
+			printf("key:  %d\n", node_key(htab_node->node));	
 			htab_node = htab_node->next;
 		}
 	}
