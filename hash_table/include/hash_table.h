@@ -36,4 +36,4 @@ void htab_insert(htab_t *htab, keyT key);
 
 void htab_insert_list_node(htab_t *htab, list_node_t *list_node);
 
-void htab_rehash(htab_t *htab, int size, int (*hash)(keyT));
+void htab_rehash(htab_t *htab, int size);
