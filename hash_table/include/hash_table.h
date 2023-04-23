@@ -8,24 +8,29 @@ struct htab_t;
 
 typedef struct htab_t htab_t;
 
-typedef const char* keyT;
+typedef struct htab_node_t htab_node_t;
+
+typedef int keyT;
 
 typedef int valueT;
 
-htab_t *htab_create(int size, int (*hash)(keyT)); //done
+htab_t *htab_create(int size, int (*hash)(keyT));
+// удалить передаваемую функию
 
-void htab_free(htab_t *htab); //done
+void htab_free(htab_t *htab);
 
-int htab_size(htab_t *htab);  //done
+list_node_t *htab_find_list_node(htab_t *htab, keyT key);
 
-int htab_load_factor(htab_t *htab);  //done
+htab_node_t *htab_find_hash_node(htab_t *htab, keyT key);
 
-list_node_t *htab_find(htab_t *htab, keyT key);
+int htab_size(htab_t *htab);
+
+int htab_load_factor(htab_t *htab);
+
+void htab_dump(htab_t *htab);
 
 void htab_erase(htab_t *htab, keyT key);
 
 void htab_insert(htab_t *htab, keyT key);
 
 void htab_rehash(htab_t *htab, int size, int (*hash)(keyT));
-
-void htab_dump(htab_t *htab);
