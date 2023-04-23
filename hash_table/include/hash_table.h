@@ -14,10 +14,11 @@ typedef int keyT;
 
 typedef int valueT;
 
-htab_t *htab_create(int size, int (*hash)(keyT));
-// удалить передаваемую функию
+htab_t *htab_create(int size);
 
 void htab_free(htab_t *htab);
+
+void free_node(htab_t *htab);
 
 list_node_t *htab_find_list_node(htab_t *htab, keyT key);
 
@@ -33,4 +34,6 @@ void htab_erase(htab_t *htab, keyT key);
 
 void htab_insert(htab_t *htab, keyT key);
 
-void htab_rehash(htab_t *htab, int size, int (*hash)(keyT));
+void htab_insert_list_node(htab_t *htab, list_node_t *list_node);
+
+void htab_rehash(htab_t *htab, int size);
