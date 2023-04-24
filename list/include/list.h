@@ -25,6 +25,8 @@ void list_pop_front(list_t *list);
 
 list_node_t *list_back(list_t *list);
 
+list_node_t *list_next(list_t *list, list_node_t *node);
+
 list_node_t *list_front(list_t *list);
 
 void list_move_upfront(list_t *list, list_node_t *node);
@@ -38,3 +40,7 @@ keyT node_key(list_node_t *node);
 valueT node_value(list_node_t *node);
 
 void list_dump(list_t *list);
+
+keyT node_key(list_node_t *node);
+
+void list_erase(list_t *list, list_node_t *node);
