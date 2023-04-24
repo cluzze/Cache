@@ -8,7 +8,7 @@ struct list_t;
 typedef struct list_t list_t;
 typedef struct list_node_t list_node_t;
 
-typedef const char* keyT;
+typedef int keyT;
 typedef int valueT;
 
 list_t *list_create();
