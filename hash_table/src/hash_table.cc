@@ -216,7 +216,7 @@ void htab_rehash(htab_t *htab, int new_size)
 	for (int i = 0; i < list_size(htab->list); i++)
 	{
 		htab_insert_list_node(htab, list_node);
-		list_node = list_next(list_node);
+		list_node = list_next(htab->list, list_node);
 	}
 
 }
