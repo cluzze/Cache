@@ -1,9 +1,12 @@
 #include <gtest/gtest.h>
 
-int main() 
+int main()
 {
-    testing::InitGoogleTest();
-    return RUN_ALL_TESTS();
+	testing::InitGoogleTest();
+	return RUN_ALL_TESTS();
 }
 
-TEST()
+TEST(hash_table, create)
+{
+	htab_t *htab = htab_create(10);
+}
