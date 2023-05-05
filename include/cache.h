@@ -1,5 +1,7 @@
 #pragma once
 
+typedef int keyT;
+
 struct cache_t;
 
 typedef struct cache_t cache_t;

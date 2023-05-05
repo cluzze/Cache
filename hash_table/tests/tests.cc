@@ -1,5 +1,7 @@
 #include <gtest/gtest.h>
+
 #include "hash_table.h"
+
 int main() 
 {
 	testing::InitGoogleTest();
@@ -20,7 +22,7 @@ TEST(htab, insert)
 	htab_t *htab = htab_create(10);
 
 	for (int i = 0; i < 10; i++) {
-		htab_insert(htab, i);
+		htab_insert(htab, i, 0);
 		ASSERT_TRUE(htab_find_hash_node(htab, i));
 		ASSERT_EQ(htab_size(htab), 10);
 		ASSERT_EQ(htab_load_factor(htab), i);
