@@ -6,6 +6,7 @@
 struct list_node_t {
 	keyT key;
 	valueT value;
+	int time;
 	list_node_t *next;
 	list_node_t *prev;
 };
@@ -95,17 +96,26 @@ void list_pop_back(list_t *list)
 	list->size--;
 }
 
+<<<<<<< HEAD
 void list_push_front(list_t *list, keyT key, valueT value)
+=======
+void list_push_front(list_t *list, keyT key, valueT value, int time)
+>>>>>>> marakulin
 {
 	list_node_t *node = (list_node_t*)calloc(1, sizeof(list_node_t));
 	node->key = key;
 	node->value = value;
+<<<<<<< HEAD
+=======
+	node->time = time;
+>>>>>>> marakulin
 
 	if (list->size == 0)
 	{
 		list->front = node;
 		list->back = node;
 	}
+<<<<<<< HEAD
 	else if (list->size == 1)
 	{
 		node->next = list->back;
@@ -113,6 +123,8 @@ void list_push_front(list_t *list, keyT key, valueT value)
 		list->front = node;
 		list->back->prev = node;
 	}
+=======
+>>>>>>> marakulin
 	else
 	{
 		node->next = list->front;
@@ -152,6 +164,19 @@ keyT node_key(list_node_t *node)
 	return node->key;
 }
 
+<<<<<<< HEAD
+=======
+valueT node_value(list_node_t *node)
+{
+	node->value;
+}
+
+int node_time(list_node_t *node)
+{
+	return node->time;
+}
+
+>>>>>>> marakulin
 void list_dump(list_t *list)
 {
 	int i = 0;
