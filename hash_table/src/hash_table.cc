@@ -319,7 +319,7 @@ void htab_rehash(htab_t *htab, int new_size)
 	for (int i = 0; i < list_size(htab->list); i++)
 	{
 		htab_insert_list_node(htab, list_node);
-		list_node = list_next(list_node);
+		list_node = list_next(htab->list, list_node);
 	}
 
 }
@@ -346,26 +346,8 @@ void htab_dump(htab_t *htab)
 	}
 }
 
-void htab_rehash(htab_t *htab, int new_size)
+list_t *htab_list(htab_t *htab) 
 {
-	assert(htab && "null pointer in htab_rehash");
-	
-	list_node_t *list_node = NULL;
-
-	free_node(htab);
-	free(htab->buckets);
-	htab->buckets = (htab_node_t **) calloc(new_size, sizeof(htab_node_t *));
-	assert(htab->buckets && "null pointer after realloc");
-	
-	htab->size = new_size;
-	htab->load_factor = 0;
-	list_node = list_front(htab->list);
-
-	for (int i = 0; i < list_size(htab->list); i++)
-	{
-		htab_insert_list_node(htab, list_node);
-		list_node = list_next(list_node);
-	}
-
+	return htab->list;
 }
 
