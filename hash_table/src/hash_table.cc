@@ -243,3 +243,9 @@ void htab_dump(htab_t *htab)
 	}
 }
 
+list_t *htab_list(htab_t *htab) 
+{
+	return htab->list;
+}
+
+

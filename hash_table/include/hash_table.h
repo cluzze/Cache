@@ -1,4 +1,3 @@
-//Definition of hash table implemented using separate chaining
 
 #pragma once
 
@@ -20,8 +19,6 @@ void htab_free(htab_t *htab);
 
 void free_node(htab_t *htab);
 
-// htab_list
-
 list_node_t *htab_find_list_node(htab_t *htab, keyT key);
 
 htab_node_t *htab_find_hash_node(htab_t *htab, keyT key);
@@ -29,6 +26,8 @@ htab_node_t *htab_find_hash_node(htab_t *htab, keyT key);
 int htab_size(htab_t *htab);
 
 int htab_load_factor(htab_t *htab);
+
+list_t *htab_list(htab_t *htab);
 
 void htab_dump(htab_t *htab);
 
