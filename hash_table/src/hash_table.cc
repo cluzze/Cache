@@ -4,8 +4,8 @@
 #include <stdio.h>
 #include <string.h>
 #include <assert.h>
+#include <time.h> 
 
-// typedef struct htab_node_t htab_node_t;
 
 struct htab_node_t
 {
@@ -87,19 +87,6 @@ list_node_t *htab_find_list_node(htab_t *htab, keyT key)
 	return htab_node->node;
 }
 
-htab_node_t *htab_find_hash_node(htab_t *htab, keyT key) 
-{
-	assert(htab && "null pointer in htab_find_hash_node");
-
-	while (htab_node && !(node_key(htab_node->node) == key))
-	{
-		// printf("key %d %d\n", key, node_key(htab_node->node) );
-		htab_node = htab_node->next;
-	}
-
-	return htab_node;
-}
-
 void htab_insert(htab_t *htab, keyT key, valueT value, int time)
 { 
 	assert(htab && "null pointer in htab_insert");
@@ -115,49 +102,6 @@ void htab_insert(htab_t *htab, keyT key, valueT value, int time)
 	htab_insert_list_node(htab, list_front(htab->list));
 }
 
-void htab_insert_list_node(htab_t *htab, list_node_t *list_node) 
-{
-	assert(htab && "null pointer in htab_insert");
-
-	int hash = defolt_hash(node_key(list_node), htab->size);
-	htab_node_t *node_htab = (htab_node_t *) calloc(1, sizeof(htab_node_t));
-	assert(node_htab && "null pointer after calloc in insert");
-
-
-	node_htab->next = htab->buckets[hash];
-	node_htab->node = list_node;
-	if (htab->buckets[hash])
-	{
-		htab->buckets[hash]->prev = node_htab;
-	}
-	else 
-	{
-		htab->buckets[hash] = node_htab;
-	}
-	htab->load_factor++;
-
-}
-
-void htab_erase(htab_t *htab, keyT key) 
-{
-	assert(htab && "null pointer in htab_erase");
-
-	int hash = 0;
-	htab_node_t *node_hash = htab_find_hash_node(htab, key);
-	assert(node_hash && "null pointer in htab_erase");
-}
-
-list_node_t *htab_find_list_node(htab_t *htab, keyT key) 
-{
-	assert(htab && "null pointer in htab_find_list_node");
-
-	htab_node_t *htab_node = htab_find_hash_node(htab, key);
-
-	if (htab_node == NULL) 
-		return NULL;
-	
-	return htab_node->node;
-}
 
 htab_node_t *htab_find_hash_node(htab_t *htab, keyT key) 
 {
@@ -180,13 +124,15 @@ void htab_insert(htab_t *htab, keyT key)
 	assert(htab && "null pointer in htab_insert");
 
 	int hash = defolt_hash(key, htab->size);
+	time_t time_add = 0;
 
 	if (htab_find_hash_node(htab, key)) 
 	{
 		return;
 	}
 
-	list_push_front(htab->list, key, hash);
+	time(&time_add);
+	list_push_front(htab->list, key, hash, time_add);
 	htab_insert_list_node(htab, list_front(htab->list));
 
 
@@ -215,73 +161,73 @@ void htab_insert_list_node(htab_t *htab, list_node_t *list_node)
 
 }
 
-void htab_erase(htab_t *htab, keyT key) 
-{
-	assert(htab && "null pointer in htab_erase");
+// void htab_erase(htab_t *htab, keyT key) 
+// {
+// 	assert(htab && "null pointer in htab_erase");
 
-	int hash = 0;
-	htab_node_t *node_hash = htab_find_hash_node(htab, key);
-	assert(node_hash && "null pointer in htab_erase");
+// 	int hash = 0;
+// 	htab_node_t *node_hash = htab_find_hash_node(htab, key);
+// 	assert(node_hash && "null pointer in htab_erase");
 
-	if (!node_hash->next && !node_hash->prev) 
-	{
-		hash =  defolt_hash(key, htab->size); 
-		htab->buckets[hash] = NULL;
-		htab->load_factor--;
-	}
-	else if (!node_hash->next)
-	{
-		node_hash->prev->next = NULL;
-	}
-	else if (!node_hash->prev) 
-	{
-		hash = defolt_hash(key, htab->size); 
-		htab->buckets[hash] = node_hash->next;
-		node_hash->next->prev = NULL;
-	}
-	else 
-	{
-		node_hash->next->prev = node_hash->prev;
-		node_hash->prev->next = node_hash->next;
-	}
+// 	if (!node_hash->next && !node_hash->prev) 
+// 	{
+// 		hash =  defolt_hash(key, htab->size); 
+// 		htab->buckets[hash] = NULL;
+// 		htab->load_factor--;
+// 	}
+// 	else if (!node_hash->next)
+// 	{
+// 		node_hash->prev->next = NULL;
+// 	}
+// 	else if (!node_hash->prev) 
+// 	{
+// 		hash = defolt_hash(key, htab->size); 
+// 		htab->buckets[hash] = node_hash->next;
+// 		node_hash->next->prev = NULL;
+// 	}
+// 	else 
+// 	{
+// 		node_hash->next->prev = node_hash->prev;
+// 		node_hash->prev->next = node_hash->next;
+// 	}
 	
-	list_erase(htab->list, node_hash->node);
-	free(node_hash);
-}
+// 	list_erase(htab->list, node_hash->node);
+// 	free(node_hash);
+// }
+
+// void free_node(htab_t *htab)
+// {
+// 	assert(htab && "null pointer in free_node");
+// 	htab_node_t *next = NULL;
+// 	htab_node_t *node = NULL;
+
+// 	if (!node_hash->next && !node_hash->prev) 
+// 	{
+// 		hash =  defolt_hash(key, htab->size); 
+// 		htab->buckets[hash] = NULL;
+// 		htab->load_factor--;
+// 	}
+// 	else if (!node_hash->next)
+// 	{
+// 		node_hash->prev->next = NULL;
+// 	}
+// 	else if (!node_hash->prev) 
+// 	{
+// 		hash = defolt_hash(key, htab->size); 
+// 		htab->buckets[hash] = node_hash->next;
+// 		node_hash->next->prev = NULL;
+// 	}
+// 	else 
+// 	{
+// 		node_hash->next->prev = node_hash->prev;
+// 		node_hash->prev->next = node_hash->next;
+// 	}
+	
+// 	list_erase(htab->list, node_hash->node);
+// 	free(node_hash);
+// }
 
 void free_node(htab_t *htab)
-{
-	assert(htab && "null pointer in free_node");
-	htab_node_t *next = NULL;
-	htab_node_t *node = NULL;
-
-	if (!node_hash->next && !node_hash->prev) 
-	{
-		hash =  defolt_hash(key, htab->size); 
-		htab->buckets[hash] = NULL;
-		htab->load_factor--;
-	}
-	else if (!node_hash->next)
-	{
-		node_hash->prev->next = NULL;
-	}
-	else if (!node_hash->prev) 
-	{
-		hash = defolt_hash(key, htab->size); 
-		htab->buckets[hash] = node_hash->next;
-		node_hash->next->prev = NULL;
-	}
-	else 
-	{
-		node_hash->next->prev = node_hash->prev;
-		node_hash->prev->next = node_hash->next;
-	}
-	
-	list_erase(htab->list, node_hash->node);
-	free(node_hash);
-}
-
-/*void free_node(htab_t *htab)
 {
 	assert(htab && "null pointer in free_node");
 	htab_node_t *next = NULL;
@@ -299,7 +245,7 @@ void free_node(htab_t *htab)
 		}
 	}
 	
-}*/
+}
 
 void htab_rehash(htab_t *htab, int new_size)
 {

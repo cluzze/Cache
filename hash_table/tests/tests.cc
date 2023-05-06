@@ -1,5 +1,7 @@
 #include <gtest/gtest.h>
 #include "hash_table.h"
+#include "list.h"
+
 int main() 
 {
 	testing::InitGoogleTest();
