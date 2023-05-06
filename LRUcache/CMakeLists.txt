@@ -3,6 +3,9 @@ include_directories(${CMAKE_CURRENT_SOURCE_DIR}/include)
 add_library(LRUcache STATIC ${CMAKE_CURRENT_SOURCE_DIR}/src/LRUcache.cc)
 set(PROJECT_NAME LRUcache)
 
+add_dependencies(${PROJECT_NAME} list hash_table)
+target_link_libraries(${PROJECT_NAME} PRIVATE list hash_table)
+
 #tests
 option(TESTING "Include testing" ON)
 if (TESTING)

@@ -3,6 +3,9 @@ include_directories(${CMAKE_CURRENT_SOURCE_DIR}/include)
 add_library(hash_table STATIC ${CMAKE_CURRENT_SOURCE_DIR}/src/hash_table.cc)
 set(PROJECT_NAME hash_table)
 
+add_dependencies(${PROJECT_NAME} list)
+target_link_libraries(${PROJECT_NAME} PRIVATE list)
+
 #tests
 option(TESTING "Include testing" ON)
 if (TESTING)
