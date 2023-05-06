@@ -96,15 +96,14 @@ void list_pop_back(list_t *list)
 	list->size--;
 }
 
-
 void list_push_front(list_t *list, keyT key, valueT value, int time)
 
 {
 	list_node_t *node = (list_node_t*)calloc(1, sizeof(list_node_t));
 	node->key = key;
 	node->value = value;
-	node->time = time;
 
+	node->time = time;
 
 	if (list->size == 0)
 	{
@@ -152,7 +151,7 @@ keyT node_key(list_node_t *node)
 
 valueT node_value(list_node_t *node)
 {
-	node->value;
+	return node->value;
 }
 
 int node_time(list_node_t *node)
@@ -172,4 +171,10 @@ void list_dump(list_t *list)
 		i++;
 	}
 	printf("\n");
+}
+
+
+list_node_t *list_next(list_t *list, list_node_t *node)
+{
+	return node->next;
 }

@@ -1,4 +1,3 @@
-
 #pragma once
 
 #include "list.h"
@@ -33,7 +32,7 @@ void htab_dump(htab_t *htab);
 
 void htab_erase(htab_t *htab, keyT key);
 
-void htab_insert(htab_t *htab, keyT key);
+void htab_insert(htab_t *htab, keyT key, int time);
 
 void htab_insert_list_node(htab_t *htab, list_node_t *list_node);
 

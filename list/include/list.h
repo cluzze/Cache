@@ -50,3 +50,5 @@ void list_dump(list_t *list);
 keyT node_key(list_node_t *node);
 
 void list_erase(list_t *list, list_node_t *node);
+
+list_node_t *list_next(list_t *list, list_node_t *node);
