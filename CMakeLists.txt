@@ -14,10 +14,10 @@ include_directories(include hash_table/include list/include LRUcache/include)
 
 set(CACHE_SOURCE src/cache.cc)
 
-add_executable(cache ${CACHE_SOURCE})
-add_custom_target(run_cache COMMAND ./cache)
+add_library(${PROJECT_NAME} STATIC ${CMAKE_CURRENT_SOURCE_DIR}/src/cache.cc)
 
-add_dependencies(run_cache cache)
+add_dependencies(${PROJECT_NAME} list hash_table LRUcache)
+target_link_libraries(${PROJECT_NAME} list hash_table LRUcache)
 
 option(TESTING "Include testing" ON)
 if (TESTING)
@@ -28,7 +28,7 @@ if (TESTING)
 	include_directories(${GTest_INCLUDE_DIRS} include)
 
 	add_executable(${PROJECT_NAME}_tests ${SOURCE_TEST})
-	target_link_libraries(${PROJECT_NAME}_tests PRIVATE GTest::GTest GTest::Main)
+	target_link_libraries(${PROJECT_NAME}_tests PRIVATE GTest::GTest GTest::Main cache)
 
 	add_custom_target(run_${PROJECT_NAME}_tests
 		COMMENT "Running ${PROJECT_NAME}_tests"
