@@ -110,29 +110,15 @@ htab_node_t *htab_find_hash_node(htab_t *htab, keyT key)
 
 	int hash =  defolt_hash(key, htab->size);
 	htab_node_t *htab_node = htab->buckets[hash];
+	
 
 	while (htab_node && !(node_key(htab_node->node) == key) && !(node_value(htab_node->node) == hash))
 	{
-		// printf("key %d %d\n", key, node_key(htab_node->node) );
+		// printf("key %d %d %d\n", key, node_key(htab_node->node), hash);
 		htab_node = htab_node->next;
 	}
 
 	return htab_node;
-}
-
-void htab_insert(htab_t *htab, keyT key, int time)
-{ 
-	assert(htab && "null pointer in htab_insert");
-
-	int hash = defolt_hash(key, htab->size);
-
-	if (htab_find_hash_node(htab, key)) 
-	{
-		return;
-	}
-
-	list_push_front(htab->list, key, hash, time);
-	htab_insert_list_node(htab, list_front(htab->list));
 }
 
 void htab_insert_list_node(htab_t *htab, list_node_t *list_node) 
@@ -152,9 +138,10 @@ void htab_insert_list_node(htab_t *htab, list_node_t *list_node)
 	}
 	else 
 	{
-		htab->buckets[hash] = node_htab;
+	    htab->load_factor++;
 	}
-	htab->load_factor++;
+	
+	htab->buckets[hash] = node_htab;
 
 }
 
