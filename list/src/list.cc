@@ -82,8 +82,14 @@ void list_pop_front(list_t *list)
 {
 	list_node_t *next = list->front->next;
 	free(list->front);
+
 	list->front = next;
-	list->front->prev = NULL;
+
+	if (list->front)
+		list->front->prev = NULL;
+	else
+		list->back = NULL;
+
 	list->size--;
 }
 
@@ -91,8 +97,14 @@ void list_pop_back(list_t *list)
 {
 	list_node_t *prev = list->back->prev;
 	free(list->back);
+	
 	list->back = prev;
-	list->back->next = NULL;
+	
+	if (list->back)
+		list->back->next = NULL;
+	else
+		list->front = NULL;
+
 	list->size--;
 }
 
@@ -166,7 +178,7 @@ void list_dump(list_t *list)
 	printf("list:\n");
 	while (cur)
 	{
-		printf("%d: <%d, %d> ", i, cur->key, cur->value);
+		printf("%d: <%d, %d, %d>\n", i, cur->key, cur->value, cur->time);
 		cur = cur->next;
 		i++;
 	}
@@ -174,7 +186,12 @@ void list_dump(list_t *list)
 }
 
 
-list_node_t *list_next(list_t *list, list_node_t *node)
+list_node_t *node_next(list_node_t *node)
 {
 	return node->next;
+}
+
+void node_set_time(list_node_t *node, int time)
+{
+	node->time = time;
 }

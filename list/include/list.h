@@ -37,18 +37,18 @@ int list_empty(list_t *list);
 
 keyT node_key(list_node_t *node);
 
-valueT node_value(list_node_t *node);
-
-void list_dump(list_t *list);
-
 void list_erase(list_t *list, list_node_t *node);
-
-int node_time(list_node_t *node);
 
 void list_dump(list_t *list);
 
 keyT node_key(list_node_t *node);
 
+valueT node_value(list_node_t *node);
+
+int node_time(list_node_t *node);
+
 void list_erase(list_t *list, list_node_t *node);
 
-list_node_t *list_next(list_t *list, list_node_t *node);
+list_node_t *node_next(list_node_t *node);
+
+void node_set_time(list_node_t *node, int time);
