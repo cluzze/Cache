@@ -2,6 +2,7 @@
 #include "LRUcache.h"
 
 #include <stdlib.h>
+#include <stdio.h>
 
 struct cache_t {
 	int capacity; // M
@@ -53,7 +54,7 @@ int cache_space(cache_t *cache)
 	return cache->capacity - cache->size;
 }
 
-lru_cache_t* find_lru(cache_t *cache) // overflow S * T
+lru_cache_t* find_lru(cache_t *cache, int time) // overflow S * T
 {
 	int i = 0;
 	lru_cache_t *min = NULL, *cur;
@@ -67,10 +68,10 @@ lru_cache_t* find_lru(cache_t *cache) // overflow S * T
 		if (!node)
 			continue;
 
-		if (min_value > node_value(node) * node_time(node))
+		if (min_value > node_value(node) * (time - node_time(node)))
 		{
 			min = cur;
-			min_value = node_value(node) * node_time(node);
+			min_value = node_value(node) * (time - node_time(node));
 		}
 	}
 
@@ -97,7 +98,7 @@ int cache_lookup_update(cache_t *cache, int key, int size, int time)
 
 	while (size > cache->capacity - cache->size)
 	{
-		min = find_lru(cache);
+		min = find_lru(cache, time);
 		node = lru_last(min);
 		freed_size = node_value(node);
 		cache->size -= freed_size;
@@ -114,8 +115,9 @@ void cache_dump(cache_t *cache)
 {
 	int i = 0;
 	printf("free space: %d\n", cache_space(cache));
-	for (i = 0; i < n; i++)
+	for (i = 0; i < cache->n; i++)
 	{
-		
+		printf("%d: ", i);
+		lru_dump(cache->lru[i]);
 	}
 }

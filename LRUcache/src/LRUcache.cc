@@ -87,8 +87,6 @@ int lru_lookup_update(lru_cache_t *lru, keyT key, valueT value, int time)
 
 	find = lru_is_present(lru, key);
 
-	//htab_dump(lru->htab);
-
 	if (!find)										// key not present in cache
 	{
 		lru_add_el(lru, key, value, time);
@@ -98,4 +96,9 @@ int lru_lookup_update(lru_cache_t *lru, keyT key, valueT value, int time)
 	lru_move_el(lru, find, time);
 
 	return 1;										//cache hit
+}
+
+void lru_dump(lru_cache_t *lru)
+{
+	list_dump(htab_list(lru->htab));
 }

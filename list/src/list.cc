@@ -174,10 +174,9 @@ void list_dump(list_t *list)
 {
 	int i = 0;
 	list_node_t *cur = list->front;
-	printf("list:\n");
 	while (cur)
 	{
-		printf("%d: <%d, %d, %d>\n", i, cur->key, cur->value, cur->time);
+		printf("<%d, %d, %d> ", cur->key, cur->value, cur->time);
 		cur = cur->next;
 		i++;
 	}
