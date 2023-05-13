@@ -4,8 +4,8 @@
 #include <stdio.h>
 #include <string.h>
 #include <assert.h>
+#include <time.h> 
 
-// typedef struct htab_node_t htab_node_t;
 
 struct htab_node_t
 {
@@ -52,7 +52,6 @@ void htab_free(htab_t *htab)
 {
 	assert(htab && "null pointer in htab_free");
 	free_node(htab);
-	free(htab->buckets);
 	list_free(htab->list);
 
 	htab->load_factor = 0;
@@ -75,6 +74,8 @@ int htab_load_factor(htab_t *htab)
 	return htab->load_factor;
 }
 
+
+
 void htab_insert(htab_t *htab, keyT key, valueT value, int time)
 { 
 	assert(htab && "null pointer in htab_insert");
@@ -89,6 +90,7 @@ void htab_insert(htab_t *htab, keyT key, valueT value, int time)
 	list_push_front(htab->list, key, value, time);
 	htab_insert_list_node(htab, list_front(htab->list));
 }
+
 
 list_node_t *htab_find_list_node(htab_t *htab, keyT key) 
 {
@@ -108,29 +110,15 @@ htab_node_t *htab_find_hash_node(htab_t *htab, keyT key)
 
 	int hash =  defolt_hash(key, htab->size);
 	htab_node_t *htab_node = htab->buckets[hash];
+	
 
-	while (htab_node && !(node_key(htab_node->node) == key))
+	while (htab_node && !(node_key(htab_node->node) == key) && !(node_value(htab_node->node) == hash))
 	{
-		// printf("key %d %d\n", key, node_key(htab_node->node) );
+		// printf("key %d %d %d\n", key, node_key(htab_node->node), hash);
 		htab_node = htab_node->next;
 	}
 
 	return htab_node;
-}
-
-void htab_insert(htab_t *htab, keyT key, int time)
-{ 
-	assert(htab && "null pointer in htab_insert");
-
-	int hash = defolt_hash(key, htab->size);
-
-	if (htab_find_hash_node(htab, key)) 
-	{
-		return;
-	}
-
-	list_push_front(htab->list, key, hash, time);
-	htab_insert_list_node(htab, list_front(htab->list));
 }
 
 void htab_insert_list_node(htab_t *htab, list_node_t *list_node) 
@@ -149,9 +137,11 @@ void htab_insert_list_node(htab_t *htab, list_node_t *list_node)
 	}
 	else
 	{
-		htab->load_factor++;
+	    htab->load_factor++;
 	}
+	
 	htab->buckets[hash] = node_htab;
+
 }
 
 void htab_erase(htab_t *htab, keyT key) 
@@ -186,7 +176,7 @@ void htab_erase(htab_t *htab, keyT key)
 	
 	list_erase(htab->list, node_hash->node);
 	free(node_hash);
-}
+}	
 
 void free_node(htab_t *htab)
 {
@@ -205,7 +195,7 @@ void free_node(htab_t *htab)
 			node = next;			
 		}
 	}
-	
+	free(htab->buckets);
 }
 
 void htab_rehash(htab_t *htab, int new_size)
@@ -215,7 +205,6 @@ void htab_rehash(htab_t *htab, int new_size)
 	list_node_t *list_node = NULL;
 
 	free_node(htab);
-	free(htab->buckets);
 	htab->buckets = (htab_node_t **) calloc(new_size, sizeof(htab_node_t *));
 	assert(htab->buckets && "null pointer after realloc");
 	

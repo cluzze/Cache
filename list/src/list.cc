@@ -160,7 +160,6 @@ keyT node_key(list_node_t *node)
 	return node->key;
 }
 
-
 valueT node_value(list_node_t *node)
 {
 	return node->value;
