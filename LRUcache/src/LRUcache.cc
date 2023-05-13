@@ -51,13 +51,17 @@ list_node_t* lru_is_present(lru_cache_t *lru, keyT key)
 {
 	list_node_t *find;
 
-	find = htab_find(lru->htab, key);
+	find = htab_find_list_node(lru->htab, key);
 
 	return find;
 }
 
 void lru_add_el(lru_cache_t *lru, keyT key, valueT value, int time)
 {
+	list_t *cache = NULL;
+
+	cache = htab_list(lru->htab);
+
 	if (list_size(cache) == lru->size)			//cache is full
 	{
 		lru_delete_last(lru);
@@ -65,20 +69,33 @@ void lru_add_el(lru_cache_t *lru, keyT key, valueT value, int time)
 	htab_insert(lru->htab, key, value, time);
 }
 
+void lru_move_el(lru_cache_t *lru, list_node_t *find, int time)
+{
+	list_t *cache = NULL;
+	cache = htab_list(lru->htab);
+
+	node_set_time(find, time);
+	list_move_upfront(cache, find);
+}
+
 int lru_lookup_update(lru_cache_t *lru, keyT key, valueT value, int time)
 {
-	list_node_t *find, *back;
+	list_node_t *find;
 	list_t *cache;
-	keyT erase_key;
 
 	cache = htab_list(lru->htab);
 	find = lru_is_present(lru, key);
+
+	printf("%p", find);
+	list_dump(cache);
 
 	if (!find)										// key not present in cache
 	{
 		lru_add_el(lru, key, value, time);
 		return 0;									//cache miss
 	}
-	list_move_upfront(cache, find);
+
+	lru_move_el(lru, find, time);
+
 	return 1;										//cache hit
 }

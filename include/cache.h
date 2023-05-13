@@ -8,4 +8,8 @@ typedef struct cache_t cache_t;
 
 cache_t *cache_create(int size);
 
-int cache_lookup_update(cache_t *cache, keyT key, int keySize);
+void cache_free(cache_t *cache);
+
+int cache_size(cache_t *cache);
+
+int cache_lookup_update(cache_t *cache, keyT key, int size, int time);

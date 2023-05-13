@@ -7,7 +7,7 @@ struct cache_t {
 	int capacity; // M
 	int size;
 	int n;
-	lru_cache_t *lru;
+	lru_cache_t **lru;
 };
 
 int log2(int x)
@@ -29,22 +29,37 @@ cache_t *cache_create(int capacity)
 	cache->capacity = capacity;
 	cache->size = 0;
 	cache->n = log2(capacity) + 1;
-	cache->lru = (lru_cache_t*)calloc(cache->n, sizeof(lru_cache_t));
+	cache->lru = (lru_cache_t**)calloc(cache->n, sizeof(lru_cache_t*));
 	for (i = 0; i < cache->n; i++)
 	{
-		cache->lru = lru_create(capacity);
+		cache->lru[i] = lru_create(capacity);
 	}
 	return cache;
 }
 
-lru_cache_t* find_lru(cache *cache) // overflow S * T
+void cache_free(cache_t *cache)
+{
+	int i = 0;
+	for (i = 0; i < cache->n; i++)
+	{
+		lru_free(cache->lru[i]);
+	}
+	free(cache);
+}
+
+int cache_size(cache_t *cache)
+{
+	return cache->size;
+}
+
+lru_cache_t* find_lru(cache_t *cache) // overflow S * T
 {
 	int i = 0;
 	lru_cache_t *min = NULL, *cur;
 	list_node_t *node = NULL;
 	int min_value = 1e9;
 
-	for (i = 0; i < n; i++)
+	for (i = 0; i < cache->n; i++)
 	{
 		cur = cache->lru[i];
 		node = lru_last(cur);
@@ -61,7 +76,7 @@ lru_cache_t* find_lru(cache *cache) // overflow S * T
 	return min;
 }
 
-int cache_lookup_update(cache *cache, int key, int size)
+int cache_lookup_update(cache_t *cache, int key, int size, int time)
 {
 	int freed_size = 0;
 	int i = 0;
@@ -88,5 +103,5 @@ int cache_lookup_update(cache *cache, int key, int size)
 	}
 
 
-	lru_lookup_update()
+	//lru_lookup_update()
 }
