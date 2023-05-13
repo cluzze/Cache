@@ -44,12 +44,13 @@ void cache_free(cache_t *cache)
 	{
 		lru_free(cache->lru[i]);
 	}
+	free(cache->lru);
 	free(cache);
 }
 
-int cache_size(cache_t *cache)
+int cache_space(cache_t *cache)
 {
-	return cache->size;
+	return cache->capacity - cache->size;
 }
 
 lru_cache_t* find_lru(cache_t *cache) // overflow S * T
@@ -90,7 +91,8 @@ int cache_lookup_update(cache_t *cache, int key, int size, int time)
 
 	if (find)
 	{
-		
+		lru_move_el(cache->lru[i], find, time);
+		return 1;
 	}
 
 	while (size > cache->capacity - cache->size)
@@ -102,6 +104,18 @@ int cache_lookup_update(cache_t *cache, int key, int size, int time)
 		lru_delete_last(min);
 	}
 
+	lru_add_el(cache->lru[i], key, size, time);
+	cache->size += size;
 
-	//lru_lookup_update()
+	return 0;
+}
+
+void cache_dump(cache_t *cache)
+{
+	int i = 0;
+	printf("free space: %d\n", cache_space(cache));
+	for (i = 0; i < n; i++)
+	{
+		
+	}
 }

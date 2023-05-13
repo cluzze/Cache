@@ -114,7 +114,6 @@ void list_push_front(list_t *list, keyT key, valueT value, int time)
 	list_node_t *node = (list_node_t*)calloc(1, sizeof(list_node_t));
 	node->key = key;
 	node->value = value;
-
 	node->time = time;
 
 	if (list->size == 0)

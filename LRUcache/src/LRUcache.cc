@@ -84,10 +84,10 @@ int lru_lookup_update(lru_cache_t *lru, keyT key, valueT value, int time)
 	list_t *cache;
 
 	cache = htab_list(lru->htab);
+
 	find = lru_is_present(lru, key);
 
-	printf("%p", find);
-	list_dump(cache);
+	//htab_dump(lru->htab);
 
 	if (!find)										// key not present in cache
 	{

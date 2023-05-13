@@ -141,19 +141,17 @@ void htab_insert_list_node(htab_t *htab, list_node_t *list_node)
 	htab_node_t *node_htab = (htab_node_t *) calloc(1, sizeof(htab_node_t));
 	assert(node_htab && "null pointer after calloc in insert");
 
-
 	node_htab->next = htab->buckets[hash];
 	node_htab->node = list_node;
 	if (htab->buckets[hash])
 	{
 		htab->buckets[hash]->prev = node_htab;
 	}
-	else 
+	else
 	{
-		htab->buckets[hash] = node_htab;
+		htab->load_factor++;
 	}
-	htab->load_factor++;
-
+	htab->buckets[hash] = node_htab;
 }
 
 void htab_erase(htab_t *htab, keyT key) 
@@ -230,28 +228,26 @@ void htab_rehash(htab_t *htab, int new_size)
 		htab_insert_list_node(htab, list_node);
 		list_node = node_next(list_node);
 	}
-
 }
-
 
 void htab_dump(htab_t *htab)
 {
 	int i = 0;
 	htab_node_t *htab_node = NULL;
 
-    printf("%d\n", htab_size(htab));
-    printf("%d\n", htab_load_factor(htab));
+    //printf("%d\n", htab_size(htab));
+    //printf("%d\n", htab_load_factor(htab));
 	list_dump(htab->list);
 	for (i = 0; i < htab->size; i++)
 	{
 		htab_node = htab->buckets[i];
-
+		printf("%d:", i);
 		while (htab_node)
 		{
-			printf("number: %d\n", i);
-			printf("key:  %d\n", node_key(htab_node->node));	
+			printf("key: %d ", node_key(htab_node->node));	
 			htab_node = htab_node->next;
 		}
+		printf("\n");
 	}
 }
 

@@ -26,3 +26,11 @@ TEST(lru, lookup)
 	}
 	lru_free(lru);
 }
+
+TEST(cache, lookup)
+{
+	cache_t *cache = cache_create(5);
+	cache_lookup_update(cache, 1, 2, 0);
+	ASSERT_TRUE(cache_space(cache) == 3);
+	cache_free(cache);
+}
