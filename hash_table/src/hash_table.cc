@@ -4,8 +4,12 @@
 #include <stdio.h>
 #include <string.h>
 #include <assert.h>
-#include <time.h> 
+#include <errno.h> 
 
+// htab functions
+// working with adding and removing elements
+// working with rehash table 
+// working with encapsulation htab
 
 struct htab_node_t
 {
@@ -22,7 +26,7 @@ struct htab_t
 	int load_factor; 
 };
 
-int defolt_hash(keyT key, int size) 
+int default_hash(keyT key, int size) 
 {
 	// int mod = rand();
 	// int num = rand();
@@ -33,12 +37,21 @@ int defolt_hash(keyT key, int size)
 
 htab_t *htab_create(int size) 
 {
-	assert(size != 0 && "size == 0");
+	assert(size != 0 || size < 0 && "size == 0");
+
 	htab_t *htab = (htab_t *) calloc(1, sizeof(htab_t));
-	assert(htab && "null pointer after calloc in htab_create");
+	if (htab == NULL) 
+	{
+		perror("htab null pointer after calloc in htab_create");
+		exit(errno);
+	}
 
 	htab->buckets = (htab_node_t **) calloc(size + 1, sizeof(htab_node_t *));
-	assert(htab->buckets && "null pointer after calloc in htab_create");
+	if (htab->buckets == NULL)
+	{
+		perror("htab->buckets null pointer after calloc in htab_create");
+		exit(errno);
+	}
 
 	htab->size = size;
 	htab->load_factor = 0;
@@ -80,7 +93,7 @@ void htab_insert(htab_t *htab, keyT key, valueT value, int time)
 { 
 	assert(htab && "null pointer in htab_insert");
 
-	int hash = defolt_hash(key, htab->size);
+	int hash = default_hash(key, htab->size);
 
 	if (htab_find_hash_node(htab, key)) 
 	{
@@ -108,7 +121,7 @@ htab_node_t *htab_find_hash_node(htab_t *htab, keyT key)
 {
 	assert(htab && "null pointer in htab_find_hash_node");
 
-	int hash =  defolt_hash(key, htab->size);
+	int hash =  default_hash(key, htab->size);
 	htab_node_t *htab_node = htab->buckets[hash];
 	
 
@@ -125,9 +138,15 @@ void htab_insert_list_node(htab_t *htab, list_node_t *list_node)
 {
 	assert(htab && "null pointer in htab_insert");
 
-	int hash = defolt_hash(node_key(list_node), htab->size);
+	int hash = default_hash(node_key(list_node), htab->size);
+
 	htab_node_t *node_htab = (htab_node_t *) calloc(1, sizeof(htab_node_t));
-	assert(node_htab && "null pointer after calloc in insert");
+	
+	if (node_htab == NULL)
+	{
+		perror("node_htab null pointer after calloc in htab_insert_list_node");
+		exit(errno);
+	}
 
 	node_htab->next = htab->buckets[hash];
 	node_htab->node = list_node;
@@ -141,7 +160,6 @@ void htab_insert_list_node(htab_t *htab, list_node_t *list_node)
 	}
 	
 	htab->buckets[hash] = node_htab;
-
 }
 
 void htab_erase(htab_t *htab, keyT key) 
@@ -150,11 +168,10 @@ void htab_erase(htab_t *htab, keyT key)
 
 	int hash = 0;
 	htab_node_t *node_hash = htab_find_hash_node(htab, key);
-	assert(node_hash && "null pointer in htab_erase");
 
 	if (!node_hash->next && !node_hash->prev) 
 	{
-		hash =  defolt_hash(key, htab->size); 
+		hash =  default_hash(key, htab->size); 
 		htab->buckets[hash] = NULL;
 		htab->load_factor--;
 	}
@@ -164,7 +181,7 @@ void htab_erase(htab_t *htab, keyT key)
 	}
 	else if (!node_hash->prev) 
 	{
-		hash = defolt_hash(key, htab->size); 
+		hash = default_hash(key, htab->size); 
 		htab->buckets[hash] = node_hash->next;
 		node_hash->next->prev = NULL;
 	}
@@ -206,11 +223,18 @@ void htab_rehash(htab_t *htab, int new_size)
 
 	free_node(htab);
 	htab->buckets = (htab_node_t **) calloc(new_size, sizeof(htab_node_t *));
-	assert(htab->buckets && "null pointer after realloc");
+	
+	if (htab->buckets == NULL) 
+	{
+		perror("htab->buckets null pointer after calloc in htab_rehash");
+		exit(errno);
+	}
 	
 	htab->size = new_size;
 	htab->load_factor = 0;
 	list_node = list_front(htab->list);
+
+	assert(list_node && "null pointer after list_front in htab_rehash");
 
 	for (int i = 0; i < list_size(htab->list); i++)
 	{
@@ -221,6 +245,8 @@ void htab_rehash(htab_t *htab, int new_size)
 
 void htab_dump(htab_t *htab)
 {
+	assert(htab && "null pointer in htab_dump");
+
 	int i = 0;
 	htab_node_t *htab_node = NULL;
 
@@ -242,6 +268,8 @@ void htab_dump(htab_t *htab)
 
 list_t *htab_list(htab_t *htab) 
 {
+	assert(htab && "null pointer in htab_list");
+	
 	return htab->list;
 }
 

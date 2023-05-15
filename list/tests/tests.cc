@@ -2,6 +2,9 @@
 
 #include <gtest/gtest.h>
 
+// testing list functions: create, push_front, erase
+
+
 int main() 
 {
 	testing::InitGoogleTest();
@@ -68,5 +71,6 @@ TEST(list, erase)
 	{
 		list_push_front(list, i, i, i);
 	}
-	node = list_ list_front(list)
+
+	node = list_front(list);
 }

@@ -12,7 +12,7 @@ typedef int keyT;
 
 typedef int valueT;
 
-int defolt_hash(keyT key, int size);
+int default_hash(keyT key, int size);
 
 htab_t *htab_create(int size);
 
