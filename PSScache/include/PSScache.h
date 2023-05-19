@@ -2,16 +2,16 @@
 
 typedef int keyT;
 
-struct cache_t;
+struct pss_cache_t;
 
-typedef struct cache_t cache_t;
+typedef struct pss_cache_t pss_cache_t;
 
-cache_t *cache_create(int size);
+pss_cache_t *pss_cache_create(int size);
 
-void cache_free(cache_t *cache);
+void pss_cache_free(pss_cache_t *cache);
 
-int cache_space(cache_t *cache);
+int pss_cache_space(pss_cache_t *cache);
 
-int cache_lookup_update(cache_t *cache, keyT key, int size, int time);
+int pss_cache_lookup_update(pss_cache_t *cache, keyT key, int size, int time);
 
-void cache_dump(cache_t *cache);
+void pss_cache_dump(pss_cache_t *cache);

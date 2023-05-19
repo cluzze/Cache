@@ -10,15 +10,15 @@ set(CMAKE_CXX_STANDARD_REQUIRED OFF)
 set(CMAKE_CXX_EXTENSIONS OFF)
 set(CMAKE_CXX_COMPILER g++)
 
-include_directories(include hash_table/include list/include LRUcache/include)
+include_directories(include hash_table/include list/include LRUcache/include PSScache/include)
 
 set(MAIN main.cc)
 set(CACHE_SOURCE src/cache.cc)
 
 add_library(${PROJECT_NAME} STATIC ${CMAKE_CURRENT_SOURCE_DIR}/src/cache.cc)
 
-add_dependencies(${PROJECT_NAME} list hash_table LRUcache)
-target_link_libraries(${PROJECT_NAME} list hash_table LRUcache)
+add_dependencies(${PROJECT_NAME} list hash_table LRUcache PSScache)
+target_link_libraries(${PROJECT_NAME} list hash_table LRUcache PSScache)
 
 option(TESTING "Include testing" ON)
 
@@ -48,6 +48,7 @@ endif()
 add_subdirectory(list)
 add_subdirectory(hash_table)
 add_subdirectory(LRUcache)
+add_subdirectory(PSScache)
 
 option(SANITIZERS "Include sanitizers" ON)
 if (SANITIZERS)

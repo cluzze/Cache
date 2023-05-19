@@ -1,10 +1,10 @@
-#include "cache.h"
+#include "PSScache.h"
 #include "LRUcache.h"
 
 #include <stdlib.h>
 #include <stdio.h>
 
-struct cache_t {
+struct pss_cache_t {
 	int capacity; // M
 	int size;
 	int n;
@@ -22,11 +22,11 @@ int log2(int x)
 	return i;
 }
 
-cache_t *cache_create(int capacity)
+pss_cache_t *pss_cache_create(int capacity)
 {
-	cache_t *cache = NULL;
+	pss_cache_t *cache = NULL;
 	int i = 0;
-	cache = (cache_t*)calloc(1, sizeof(cache_t));
+	cache = (pss_cache_t*)calloc(1, sizeof(pss_cache_t));
 	cache->capacity = capacity;
 	cache->size = 0;
 	cache->n = log2(capacity) + 1;
@@ -38,7 +38,7 @@ cache_t *cache_create(int capacity)
 	return cache;
 }
 
-void cache_free(cache_t *cache)
+void pss_cache_free(pss_cache_t *cache)
 {
 	int i = 0;
 	for (i = 0; i < cache->n; i++)
@@ -49,12 +49,12 @@ void cache_free(cache_t *cache)
 	free(cache);
 }
 
-int cache_space(cache_t *cache)
+int pss_cache_space(pss_cache_t *cache)
 {
 	return cache->capacity - cache->size;
 }
 
-lru_cache_t* find_lru(cache_t *cache, int time) // overflow S * T
+lru_cache_t* find_lru(pss_cache_t *cache, int time) // overflow S * T
 {
 	int i = 0;
 	lru_cache_t *min = NULL, *cur;
@@ -78,7 +78,7 @@ lru_cache_t* find_lru(cache_t *cache, int time) // overflow S * T
 	return min;
 }
 
-int cache_lookup_update(cache_t *cache, int key, int size, int time)
+int pss_cache_lookup_update(pss_cache_t *cache, int key, int size, int time)
 {
 	int freed_size = 0;
 	int i = 0;
@@ -111,10 +111,10 @@ int cache_lookup_update(cache_t *cache, int key, int size, int time)
 	return 0;
 }
 
-void cache_dump(cache_t *cache)
+void pss_cache_dump(pss_cache_t *cache)
 {
 	int i = 0;
-	printf("free space: %d\n", cache_space(cache));
+	printf("free space: %d\n", pss_cache_space(cache));
 	for (i = 0; i < cache->n; i++)
 	{
 		printf("%d: ", i);
