@@ -3,6 +3,8 @@
 #include "hash_table.h"
 #include "stdlib.h"
 
+// testing hash table functions: create, insert, rehash, erase, find_hash_node
+
 int main()
 {
 	testing::InitGoogleTest();
@@ -12,6 +14,7 @@ int main()
 TEST(htab, create)
 {
 	htab_t *htab = htab_create(10);
+
 	ASSERT_TRUE(htab);
 	ASSERT_EQ(htab_size(htab), 10);
 	ASSERT_EQ(htab_load_factor(htab), 0);
@@ -25,7 +28,7 @@ TEST(htab, insert)
 	// checking that nodes are adding correctly
 	for (int i = 0; i < 10; i++)
 	{
-		htab_insert(htab, i, defolt_hash(i, size), 0);
+		htab_insert(htab, i, default_hash(i, size), 0);
 		ASSERT_EQ(htab_load_factor(htab), i + 1);
 		ASSERT_EQ(htab_size(htab), size);
 		ASSERT_TRUE(htab_find_hash_node(htab, i));
@@ -35,7 +38,7 @@ TEST(htab, insert)
 	// checking that nodes dont add again
 	for (int i = 0; i < 10; i++)
 	{
-		htab_insert(htab, i, defolt_hash(i, size), 0);
+		htab_insert(htab, i, default_hash(i, size), 0);
 		ASSERT_EQ(htab_load_factor(htab), 10);
 		ASSERT_EQ(htab_size(htab), size);
 		ASSERT_TRUE(htab_find_hash_node(htab, i));
@@ -53,13 +56,13 @@ TEST(htab, insert)
 
 		if (htab_find_hash_node(htab, num))
 		{
-			htab_insert(htab, num, defolt_hash(num, size), 0);
+			htab_insert(htab, num, default_hash(num, size), 0);
 			ASSERT_EQ(htab_load_factor(htab), load_factor);
 			ASSERT_EQ(htab_size(htab), size);
 		}
 		else
 		{
-			htab_insert(htab, num, defolt_hash(num, size), 0);
+			htab_insert(htab, num, default_hash(num, size), 0);
 			ASSERT_TRUE(htab_find_hash_node(htab, num));
 			ASSERT_EQ(htab_size(htab), size);
 			ASSERT_EQ(htab_load_factor(htab), load_factor + 1);
@@ -88,7 +91,7 @@ TEST(htab, rehash)
 			ASSERT_EQ(htab_size(htab), size);
 		}
 
-		htab_insert(htab, i, defolt_hash(i, size), 0);
+		htab_insert(htab, i, default_hash(i, size), 0);
 		ASSERT_TRUE(htab_find_hash_node(htab, i));
 		ASSERT_EQ(node_key(list_front(htab_list(htab))), i);
 	}
@@ -105,9 +108,9 @@ TEST(htab, erase)
 	// add nodes
 	for (int i = 0; i < size; i++)
 	{
-		htab_insert(htab, i, defolt_hash(i, size), 0);
+		htab_insert(htab, i, default_hash(i, size), 0);
 	}
-	// checking
+	// checking erase work 
 
 	for (int i = 0; i < size; i++)
 	{
@@ -118,6 +121,8 @@ TEST(htab, erase)
 		ASSERT_FALSE(htab_find_hash_node(htab, i));
 		ASSERT_EQ(list_size(htab_list(htab)), load_factor - 1);
 	}
+
+	htab_free(htab);
 }
 
 TEST(htab, find_hash_node)
@@ -127,17 +132,19 @@ TEST(htab, find_hash_node)
 	int num = 0;
 	htab_t *htab = htab_create(size);
     
-	// add nodes
+	// add nodes in htab
 	for (int i = 0; i < size; i++)
 	{
 		num = rand() % size;
 		arr[i] = num;
-		htab_insert(htab, num, defolt_hash(num, size), 0);
+		htab_insert(htab, num, default_hash(num, size), 0);
 	}
     
+	// checking thet nodes are in htab 
 	for (int i = 0; i < size; i++)
 	{
 		ASSERT_TRUE(htab_find_hash_node(htab, arr[i]));
 	}
 
+	htab_free(htab);
 }
