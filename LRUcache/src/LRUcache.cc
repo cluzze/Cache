@@ -8,14 +8,16 @@
 struct lru_cache_t
 {
 	htab_t *htab;
+	int capacity;
 	int size;
 };
 
 lru_cache_t *lru_create(int size)
 {
 	lru_cache_t *lru = (lru_cache_t*)calloc(1, sizeof(lru_cache_t));
-	lru->size = size;
-	lru->htab = htab_create(size);
+	lru->capacity = size;
+	lru->size = 0;
+	lru->htab = htab_create(lru->capacity);
 	return lru;
 }
 
