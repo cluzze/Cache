@@ -1,6 +1,6 @@
 
 #include "LRUcache.h"
-#include <gteest/gtest.h>
+#include <gtest/gtest.h>
 
 int main() 
 {

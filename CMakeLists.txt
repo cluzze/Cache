@@ -12,6 +12,7 @@ set(CMAKE_CXX_COMPILER g++)
 
 include_directories(include hash_table/include list/include LRUcache/include)
 
+set(MAIN main.cc)
 set(CACHE_SOURCE src/cache.cc)
 
 add_library(${PROJECT_NAME} STATIC ${CMAKE_CURRENT_SOURCE_DIR}/src/cache.cc)
@@ -20,6 +21,11 @@ add_dependencies(${PROJECT_NAME} list hash_table LRUcache)
 target_link_libraries(${PROJECT_NAME} list hash_table LRUcache)
 
 option(TESTING "Include testing" ON)
+
+add_executable(main ${MAIN})
+
+target_link_libraries(main PRIVATE cache)
+
 if (TESTING)
 	message("Include testing")
 	set(SOURCE_TEST tests/tests.cc)

@@ -68,5 +68,5 @@ TEST(list, erase)
 	{
 		list_push_front(list, i, i, i);
 	}
-	node = list_ list_front(list)
+	
 }

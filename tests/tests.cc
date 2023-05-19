@@ -30,7 +30,15 @@ TEST(cache, lookup)
 {
 	cache_t *cache = cache_create(5);
 
-	cache_lookup_update(cache, 1, 2, 0);
+	cache_lookup_update(cache, 1, 1, 0);
+	cache_dump(cache);
+	cache_lookup_update(cache, 2, 1, 1);
+	cache_dump(cache);
+	cache_lookup_update(cache, 3, 2, 2);
+	cache_dump(cache);
+	cache_lookup_update(cache, 4, 2, 3);
+	cache_dump(cache);
+	cache_lookup_update(cache, 1, 4, 0);
 	cache_dump(cache);
 	cache_lookup_update(cache, 2, 1, 1);
 	cache_dump(cache);
