@@ -137,6 +137,9 @@ int cache_lookup_update(cache_t *cache, int key, int size, int time)
 	int free_space = 0;
 	list_node_t *find = NULL;
 
+	if (size > cache->capacity)
+		return 0;
+
 	find = htab_find_list_node(cache->htab, key);
 
 	if (find)

@@ -86,6 +86,9 @@ int pss_cache_lookup_update(pss_cache_t *cache, int key, int size, int time)
 	list_node_t *find = NULL;
 	lru_cache_t *min = NULL;
 
+	if (size > cache->capacity)
+		return 0;
+	
 	i = log2(size);
 
 	find = lru_is_present(cache->lru[i], key);

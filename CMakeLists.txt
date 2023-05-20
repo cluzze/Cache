@@ -9,6 +9,7 @@ set(CMAKE_CXX_STANDARD 14)
 set(CMAKE_CXX_STANDARD_REQUIRED OFF)
 set(CMAKE_CXX_EXTENSIONS OFF)
 set(CMAKE_CXX_COMPILER g++)
+set(CMAKE_CXX_FLAGS "-g")
 
 include_directories(include hash_table/include list/include LRUcache/include PSScache/include)
 

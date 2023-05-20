@@ -9,23 +9,6 @@ int main()
     return RUN_ALL_TESTS();
 }
 
-TEST(lru, create)
-{
-	lru_cache_t *lru = lru_create(10);
-	ASSERT_TRUE(lru != NULL);
-	lru_free(lru);
-}
-
-TEST(lru, lookup)
-{
-	lru_cache_t *lru = lru_create(3);
-	for (int i = 0; i < 10; i++)
-	{
-		lru_lookup_update(lru, i % 4, i % 4, i);
-	}
-	lru_free(lru);
-}
-
 TEST(PSScache, lookup)
 {
 	pss_cache_t *cache = pss_cache_create(5);

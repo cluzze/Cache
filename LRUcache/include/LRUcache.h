@@ -11,6 +11,8 @@ lru_cache_t* lru_create(int size);
 
 void lru_free(lru_cache_t *lru);
 
+int lru_size(lru_cache_t *lru);
+
 list_node_t* lru_last(lru_cache_t *lru);
 
 list_node_t* lru_is_present(lru_cache_t *lru, keyT key);
