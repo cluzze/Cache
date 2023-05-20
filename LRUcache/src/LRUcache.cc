@@ -112,19 +112,14 @@ int lru_lookup_update(lru_cache_t *lru, keyT key, valueT size, int time)
 
 	find = lru_is_present(lru, key);
 
-	htab_dump(lru->htab);
-	printf("\n");
-
 	if (size > lru->capacity)
 		return 0;
 
 	if (find)
 	{
-		printf("found %d, %p\n", key, find);
 		lru_move_el(lru, find, time);
 		return 1;
 	}
-	//printf("cap: %d, csize: %d, size: %d\n", lru->capacity, lru->size, size);
 
 	while (lru->capacity - lru->size < size)
 	{
