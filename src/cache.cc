@@ -166,10 +166,24 @@ int cache_lookup_update(cache_t *cache, int key, int size, int time)
 	return 0;
 }
 
+int cache_size(cache_t *cache)
+{
+	return cache->size;
+}
 
+void cache_dump(cache_t *cache)
+{
+	assert(cache);
+	int i = 0;
+	list_node_t *node = NULL;
 
-
-
-
-
+	for (i = 0; i < cache->n; i++)
+	{
+		node = cache->keys[i];
+		printf("<%d, %d, %d>\n", node_key(node),
+								node_value(node),
+								node_time(node));
+	}
+	printf("\n");
+}
 
