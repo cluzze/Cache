@@ -1,6 +1,6 @@
 SLRU cache
 ===
-This is a team project with Liza Kuzanetsova and Aslan Pliev, implementation of SLRU cache
+This is a team project with Liza Kuznetsova and Aslan Pliev, implementation of SLRU cache
 
 Project structure
 ===
