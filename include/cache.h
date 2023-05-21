@@ -1,5 +1,7 @@
 #pragma once
 
+//SLRU cache interface
+
 struct cache_t;
 
 typedef struct cache_t cache_t;

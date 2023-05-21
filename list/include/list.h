@@ -1,6 +1,6 @@
-//Definition of list which stores hash table data
-
 #pragma once
+
+//List interface
 
 struct list_node_t;
 struct list_t;

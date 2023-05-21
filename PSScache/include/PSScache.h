@@ -1,5 +1,7 @@
 #pragma once
 
+//pss cache interface
+
 typedef int keyT;
 
 struct pss_cache_t;

@@ -1,5 +1,7 @@
 #pragma once
 
+//hash table interface
+
 #include "list.h"
 
 struct htab_t;
