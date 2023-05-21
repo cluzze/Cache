@@ -47,9 +47,9 @@ int main()
 		{
 			int j = dist(rng);
 
-			pss_hits += pss_cache_lookup_update(pss, keys[j].first, keys[j].second, k + i / 2);
-			cache_hits += cache_lookup_update(cache, keys[j].first, keys[j].second, k + i / 2);
-			lru_hits += lru_lookup_update(lru, keys[j].first, keys[j].second, k + i / 2);
+			pss_hits += pss_cache_lookup_update(pss, keys[j].first, keys[j].second, k);
+			cache_hits += cache_lookup_update(cache, keys[j].first, keys[j].second, k);
+			lru_hits += lru_lookup_update(lru, keys[j].first, keys[j].second, k);
 		}
 
 		cache_free(cache);

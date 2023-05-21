@@ -84,9 +84,9 @@ lru_cache_t* find_lru(pss_cache_t *cache, int time) // overflow S * T
 	assert(cache);
 
 	int i = 0;
-	lru_cache_t *min = NULL, *cur;
+	lru_cache_t *max = NULL, *cur;
 	list_node_t *node = NULL;
-	int min_value = 1e9;
+	int max_value = 0;
 
 	for (i = 0; i < cache->n; i++)
 	{
@@ -95,14 +95,14 @@ lru_cache_t* find_lru(pss_cache_t *cache, int time) // overflow S * T
 		if (!node)
 			continue;
 
-		if (min_value > node_value(node) * (time - node_time(node)))
+		if (max_value < node_value(node) * (time - node_time(node)))
 		{
-			min = cur;
-			min_value = node_value(node) * (time - node_time(node));
+			max = cur;
+			max_value = node_value(node) * (time - node_time(node));
 		}
 	}
 
-	return min;
+	return max;
 }
 
 int pss_cache_lookup_update(pss_cache_t *cache, int key, int size, int time)
@@ -116,7 +116,7 @@ int pss_cache_lookup_update(pss_cache_t *cache, int key, int size, int time)
 	int i = 0;
 	list_node_t *node = NULL;
 	list_node_t *find = NULL;
-	lru_cache_t *min = NULL;
+	lru_cache_t *max = NULL;
 
 	if (size > cache->capacity)
 		return 0;
@@ -135,11 +135,11 @@ int pss_cache_lookup_update(pss_cache_t *cache, int key, int size, int time)
 
 	while (size > cache->capacity - cache->size)
 	{
-		min = find_lru(cache, time);
-		node = lru_last(min);
+		max = find_lru(cache, time);
+		node = lru_last(max);
 		freed_size = node_value(node);
 		cache->size -= freed_size;
-		lru_delete_last(min);
+		lru_delete_last(max);
 	}
 
 	lru_add_el(cache->lru[i], key, size, time);
