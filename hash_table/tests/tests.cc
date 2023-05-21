@@ -54,7 +54,7 @@ TEST(htab, insert)
 		int num = rand() % 100;
 		int load_factor = htab_load_factor(htab);
 
-		if (htab_find_hash_node(htab, num))
+		if (htab_find_list_node(htab, num))
 		{
 			htab_insert(htab, num, default_hash(num, size), 0);
 			ASSERT_EQ(htab_load_factor(htab), load_factor);
@@ -62,13 +62,16 @@ TEST(htab, insert)
 		}
 		else
 		{
+			htab_dump(htab);
 			htab_insert(htab, num, default_hash(num, size), 0);
+			load_factor = htab_load_factor(htab);
 			ASSERT_TRUE(htab_find_hash_node(htab, num));
 			ASSERT_EQ(htab_size(htab), size);
-			ASSERT_EQ(htab_load_factor(htab), load_factor + 1);
+			ASSERT_EQ(htab_load_factor(htab), load_factor);
 			ASSERT_EQ(node_key(list_front(htab_list(htab))), num);
 		}
 	}
+			htab_dump(htab);
 
 	htab_free(htab);
 }

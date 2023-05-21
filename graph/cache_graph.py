@@ -27,7 +27,7 @@ pyplot.legend(("cache_hits", "lru_hits", "pss_hits"))
 ax.set_xlabel("Cache size", size = 20) 
 ax.set_ylabel("Cache hits", size = 20) 
 
-ax.axis([data_x_cache_size[0], data_x_cache_size[len(data_x_cache_size) - 1] + 10, data_y_cache_hits[0], data_y_cache_hits[len(data_y_cache_hits) - 1] + 10])
+ax.axis([data_x_cache_size[0], data_x_cache_size[len(data_x_cache_size) - 1], data_y_cache_hits[0], data_y_cache_hits[len(data_y_cache_hits) - 1]])
 ax.set_title('A comparison of PSS and LRU.', size = 20, loc = 'center') 
 
 ax.grid(which='major', color = 'k')

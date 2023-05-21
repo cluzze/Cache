@@ -122,7 +122,6 @@ htab_node_t *htab_find_hash_node(htab_t *htab, keyT key)
 	
 	while (htab_node && !(node_key(htab_node->node) == key))
 	{
-		// printf("key %d %d %d\n", key, node_key(htab_node->node), hash);
 		htab_node = htab_node->next;
 	}
 
@@ -153,7 +152,7 @@ void htab_insert_list_node(htab_t *htab, list_node_t *list_node)
 	{
 	    htab->load_factor++;
 	}
-	
+
 	htab->buckets[hash] = node_htab;
 }
 
