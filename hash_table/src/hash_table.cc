@@ -243,6 +243,7 @@ void free_node(htab_t *htab)
 
 void htab_rehash(htab_t *htab, int new_size)
 {
+	printf("rehash, new size = %d\n", new_size);
 	assert(htab && "null pointer in htab_rehash");
 	
 	list_node_t *list_node = NULL;
