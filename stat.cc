@@ -21,7 +21,7 @@ int main()
 	std::random_device dev;
 	std::mt19937 rng(dev());
 	
-	FILE *output = fopen("data.txt", "w");
+	FILE *output = fopen("../graph/data.txt", "w");
 
 	int cache_size = 0;
 	int n = 0, key = 0, size = 0, time = 0, i = 0;

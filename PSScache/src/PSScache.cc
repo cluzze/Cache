@@ -74,7 +74,7 @@ void pss_cache_free(pss_cache_t *cache)
 	free(cache);
 }
 
-int pss_cache_space(pss_cache_t *cache)
+int pss_cache_space(const pss_cache_t *cache)
 {
 	assert(cache);
 
@@ -150,7 +150,7 @@ int pss_cache_lookup_update(pss_cache_t *cache, int key, int size, int time)
 	return 0;
 }
 
-void pss_cache_dump(pss_cache_t *cache)
+void pss_cache_dump(const pss_cache_t *cache)
 {
 	int i = 0;
 	printf("free space: %d\n", pss_cache_space(cache));

@@ -52,14 +52,14 @@ void list_free(list_t *list)
 	return;
 }
 
-int list_size(list_t *list)
+int list_size(const list_t *list)
 {
 	assert(list && "null pointer in list_size");
 
 	return list->size;
 }
 
-int list_empty(list_t *list)
+int list_empty(const list_t *list)
 {
 	assert(list && "null pointer in list_empty");
 	
@@ -88,14 +88,14 @@ void list_erase(list_t *list, list_node_t *node)
 	}
 }
 
-list_node_t *list_back(list_t *list)
+list_node_t *list_back(const list_t *list)
 {
 	assert(list && "null pointer in list_back");
 	
 	return list->back;
 }
 
-list_node_t *list_front(list_t *list)
+list_node_t *list_front(const list_t *list)
 {
 	assert(list && "null pointer in list_front");
 
@@ -195,28 +195,28 @@ void list_move_upfront(list_t *list, list_node_t *node)
 
 }
 
-keyT node_key(list_node_t *node)
+keyT node_key(const list_node_t *node)
 {
 	assert(node && "list_node null pointer in node_key");
 
 	return node->key;
 }
 
-valueT node_value(list_node_t *node)
+valueT node_value(const list_node_t *node)
 {
 	assert(node && "list_node null pointer in node_value");
 
 	return node->value;
 }
 
-int node_time(list_node_t *node)
+int node_time(const list_node_t *node)
 {
 	assert(node && "list_node null pointer in node_time");
 	
 	return node->time;
 }
 
-void list_dump(list_t *list)
+void list_dump(const list_t *list)
 {
 	assert(list && "list null pointer in list_dump");
 
@@ -233,7 +233,7 @@ void list_dump(list_t *list)
 }
 
 
-list_node_t *node_next(list_node_t *node)
+list_node_t *node_next(const list_node_t *node)
 {
 	assert(node && "list_node null pointer in node_next");
 	

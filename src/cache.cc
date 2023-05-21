@@ -171,12 +171,12 @@ int cache_lookup_update(cache_t *cache, int key, int size, int time)
 	return 0;
 }
 
-int cache_size(cache_t *cache)
+int cache_size(const cache_t *cache)
 {
 	return cache->size;
 }
 
-void cache_dump(cache_t *cache)
+void cache_dump(const cache_t *cache)
 {
 	assert(cache);
 	int i = 0;
