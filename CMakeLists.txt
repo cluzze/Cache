@@ -14,6 +14,7 @@ set(CMAKE_CXX_FLAGS "-g")
 include_directories(include hash_table/include list/include LRUcache/include PSScache/include)
 
 set(MAIN main.cc)
+set(STAT stat.cc)
 set(CACHE_SOURCE src/cache.cc)
 
 add_library(${PROJECT_NAME} STATIC ${CMAKE_CURRENT_SOURCE_DIR}/src/cache.cc)
@@ -24,8 +25,10 @@ target_link_libraries(${PROJECT_NAME} list hash_table LRUcache PSScache)
 option(TESTING "Include testing" ON)
 
 add_executable(main ${MAIN})
+add_executable(stat ${STAT})
 
 target_link_libraries(main PRIVATE cache)
+target_link_libraries(stat PRIVATE cache)
 
 if (TESTING)
 	message("Include testing")
