@@ -26,6 +26,11 @@ struct htab_t
 	int load_factor; 
 };
 
+enum RESIZE_MULT
+{
+	SCALE = 2 
+};
+
 int default_hash(keyT key, int size) 
 {
 	// int mod = rand();
@@ -72,14 +77,14 @@ void htab_free(htab_t *htab)
 	free(htab);
 }
 
-int htab_size(htab_t *htab) 
+int htab_size(const htab_t *htab) 
 {
 	assert(htab && "null pointer in htab_size");
 
 	return htab->size;
 }
 
-int htab_load_factor(htab_t *htab)
+int htab_load_factor(const htab_t *htab)
 {
 	assert(htab && "null pointer in htab_load_factor");
 
@@ -101,7 +106,7 @@ void htab_insert(htab_t *htab, keyT key, valueT value, int time)
 	htab_insert_list_node(htab, list_front(htab->list));
 }
 
-list_node_t *htab_find_list_node(htab_t *htab, keyT key) 
+list_node_t *htab_find_list_node(const htab_t *htab, keyT key) 
 {
 	assert(htab && "null pointer in htab_find_list_node");
 
@@ -113,7 +118,7 @@ list_node_t *htab_find_list_node(htab_t *htab, keyT key)
 	return htab_node->node;
 }
 
-htab_node_t *htab_find_hash_node(htab_t *htab, keyT key) 
+htab_node_t *htab_find_hash_node(const htab_t *htab, keyT key) 
 {
 	assert(htab && "null pointer in htab_find_hash_node");
 
@@ -140,6 +145,11 @@ void htab_insert_list_node(htab_t *htab, list_node_t *list_node)
 	{
 		perror("node_htab null pointer after calloc in htab_insert_list_node");
 		exit(errno);
+	}
+	
+	if (htab->load_factor/htab->size > 0.75) 
+	{
+		htab_rehash(htab, htab->size * SCALE);
 	}
 
 	node_htab->next = htab->buckets[hash];
@@ -237,7 +247,7 @@ void htab_rehash(htab_t *htab, int new_size)
 	}
 }
 
-void htab_dump(htab_t *htab)
+void htab_dump(const htab_t *htab)
 {
 	assert(htab && "null pointer in htab_dump");
 
@@ -260,7 +270,7 @@ void htab_dump(htab_t *htab)
 	}
 }
 
-list_t *htab_list(htab_t *htab) 
+list_t *htab_list(const htab_t *htab) 
 {
 	assert(htab && "null pointer in htab_list");
 	

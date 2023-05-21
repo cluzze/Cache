@@ -22,17 +22,17 @@ void htab_free(htab_t *htab);
 
 void free_node(htab_t *htab);
 
-list_node_t *htab_find_list_node(htab_t *htab, keyT key);
+list_node_t *htab_find_list_node(const htab_t *htab, keyT key);
 
-htab_node_t *htab_find_hash_node(htab_t *htab, keyT key);
+htab_node_t *htab_find_hash_node(const htab_t *htab, keyT key);
 
-int htab_size(htab_t *htab);
+int htab_size(const htab_t *htab);
 
-int htab_load_factor(htab_t *htab);
+int htab_load_factor(const htab_t *htab);
 
-list_t *htab_list(htab_t *htab);
+list_t *htab_list(const htab_t *htab);
 
-void htab_dump(htab_t *htab);
+void htab_dump(const htab_t *htab);
 
 void htab_erase(htab_t *htab, keyT key);
 
