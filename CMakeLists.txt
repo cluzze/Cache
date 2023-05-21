@@ -61,17 +61,3 @@ if (SANITIZERS)
 	add_compile_options(-fsanitize=address -fsanitize=undefined -g)
 	set_target_properties(${PROJECT_NAME}_tests PROPERTIES LINK_FLAGS "-fsanitize=address -fsanitize=undefined")
 endif()
-
-find_program(CLANG_FORMAT "clang-format")
-if(CLANG_FORMAT)
-	message(clang-format " from " ${CMAKE_SOURCE_DIR}/.clang-format)
-
-	file(GLOB_RECURSE ALL_SOURCE_FILES *.cpp *.hpp *.h *.c)
-	add_custom_target(
-		clang_format
-		COMMAND clang-format
-		-i
-		-style=file:${CMAKE_SOURCE_DIR}/.clang-format
-		${ALL_SOURCE_FILES}
-	)
-endif()

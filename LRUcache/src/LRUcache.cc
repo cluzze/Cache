@@ -43,12 +43,12 @@ void lru_free(lru_cache_t *lru)
 	free(lru);
 }
 
-int lru_size(lru_cache_t *lru)
+int lru_size(const lru_cache_t *lru)
 {
 	return lru->size;
 }
 
-list_node_t* lru_last(lru_cache_t *lru)
+list_node_t* lru_last(const lru_cache_t *lru)
 {
 	assert(lru);
 
@@ -94,7 +94,7 @@ void lru_add_el(lru_cache_t *lru, keyT key, valueT size, int time)
 	lru->size += size;	
 }
 
-list_node_t *lru_is_present(lru_cache_t *lru, int key)
+list_node_t *lru_is_present(const lru_cache_t *lru, int key)
 {
 	list_node_t *find = NULL;
 
@@ -133,7 +133,7 @@ int lru_lookup_update(lru_cache_t *lru, keyT key, valueT size, int time)
 	return 0;
 }
 
-void lru_dump(lru_cache_t *lru)
+void lru_dump(const lru_cache_t *lru)
 {
 	assert(lru);
 
