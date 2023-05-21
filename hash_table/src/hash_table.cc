@@ -11,6 +11,8 @@
 // working with rehash table 
 // working with encapsulation htab
 
+enum RESIZE_MULT { SCALE = 2 };
+
 struct htab_node_t
 {
 	htab_node_t *next;
@@ -26,12 +28,29 @@ struct htab_t
 	int load_factor; 
 };
 
+long long mod_mult(long long a, long long b, long long mod)
+{
+	long long sum = 0;
+
+	while (b)
+	{
+		if (b & 1)
+		{
+			sum = (sum + a) % mod;
+		}
+
+		a = (a << 1) % mod;
+		b =  b >> 1;
+	}
+
+	return sum;
+}
+
+enum PRIMES { PARAMETER = 23497, BIG_PRIME = 108881 };
+
 int default_hash(keyT key, int size) 
 {
-	// int mod = rand();
-	// int num = rand();
-	// printf("%d %d %d\n", key, size, key % size);
-	return (key % size);
+	return mod_mult(key, PARAMETER, BIG_PRIME) % size;
 } 
 
 htab_t *htab_create(int size) 
@@ -211,6 +230,7 @@ void free_node(htab_t *htab)
 
 void htab_rehash(htab_t *htab, int new_size)
 {
+	//printf("rehash, new size: %d\n", new_size);
 	assert(htab && "null pointer in htab_rehash");
 	
 	list_node_t *list_node = NULL;
