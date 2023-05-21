@@ -19,11 +19,13 @@ int main()
 	std::random_device dev;
 	std::mt19937 rng(dev());
 	
+	FILE *output = fopen("data.txt", "w");
+
 	int cache_size = 0;
 	int n = 0, key = 0, size = 0, time = 0, i = 0;
 	int lru_hits = 0, cache_hits = 0, pss_hits = 0;
 	
-	for (i = 10; i < 3060; i+= 50)
+	for (i = 10; i < 10060; i+= 50)
 	{
 		cache_size = i;
 
@@ -56,6 +58,6 @@ int main()
 		lru_free(lru);
 		pss_cache_free(pss);
 
-		printf("cache: %d\npss: %d\nlru: %d\n", cache_hits, pss_hits, lru_hits);
+		fprintf(output, "%d %d %d %d\n", cache_size, cache_hits, pss_hits, lru_hits);
 	}
 }
